@@ -1,0 +1,3 @@
+*.pyc
+fabconf.py
+local_settings.py

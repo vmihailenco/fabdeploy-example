@@ -1,0 +1,6 @@
+psycopg2
+ordereddict
+django
+jinja2
+fabric
+-e hg+https://bitbucket.org/vladimir_webdev/fabdeploy#egg=fabdeploy
