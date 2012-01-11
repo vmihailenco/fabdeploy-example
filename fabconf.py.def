@@ -1,41 +1,35 @@
 import os
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
+
+from fabdeploy.api import DefaultConf
 
 
 DIRNAME = os.path.dirname(__file__)
 
 
-HERE_CONF = OrderedDict([
-    ('address', 'vladimir@localhost'),
-    ('sudo_user', 'vladimir'),
-    ('os', 'lucid'),
+class HereConf(DefaultConf):
+    address = 'vladimir@localhost'
+    sudo_user = 'vladimir'
 
-    ('src_path', os.path.dirname(DIRNAME)),
-    ('env_path', os.path.join(DIRNAME, 've')),
-])
+    src_path = os.path.dirname(DIRNAME)
+    env_path = os.path.join(DIRNAME, 've')
 
-BASE_CONF = OrderedDict([
-    ('django_dir', 'fabdeploy_example'),
 
-    ('pip_req_path', ''),
-    ('pip_req_name', 'requirements.txt'),
+class BaseConf(DefaultConf):
+    django_dir = 'fabdeploy_example'
 
-    ('supervisor.log_path', '%(log_path)s/supervisor'),
-    ('supervisor_programs', ['gunicorn']),
-])
+    pip_req_path = ''
+    pip_req_name = 'requirements.txt'
 
-LOCALHOST_CONF = BASE_CONF.copy()
-LOCALHOST_CONF.update([
-    ('address', 'fabdeploy_example@localhost'),
-    ('sudo_user', 'vladimir'),
+    supervisor_programs = ['gunicorn']
+    supervisor__log_path = ['%(var_path)s', 'log', 'supervisor']
 
-    ('gunicorn_port', 8020),
 
-    ('remote_settings_file', 'staging_settings.py'),
+class LocalhostConf(DefaultConf):
+    address = 'fabdeploy_example@localhost'
+    sudo_user = 'vladimir'
 
-    ('supervisord_config_template', 'supervisor/supervisord.conf'),
-    ('supervisord_config', '%(supervisor_config_path)s/supervisord.conf'),
-])
+    gunicorn_port = 8020
+    remote_settings_lfile = 'staging_settings.py.tmplt'
+
+    supervisord_config_lfile = ['supervisor', 'supervisord.conf']
+    supervisord_config_file = ['%(supervisor_config_path)s', 'supervisord.conf']

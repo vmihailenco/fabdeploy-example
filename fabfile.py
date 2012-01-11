@@ -6,26 +6,7 @@ except ImportError:
 from fabdeploy import monkey; monkey.patch_all()
 from fabric.api import env, task, settings
 from fabric.contrib import files
-
-from fabdeploy.api import *
-
-
-setup_fabdeploy()
-
-
-@task
-def conf(name, **kwargs):
-    fabconf(name, {}, kwargs)
-
-
-@task
-def here(**kwargs):
-    conf('here', **kwargs)
-
-
-@task
-def localhost(**kwargs):
-    conf('localhost', **kwargs)
+from fabdeploy.api import *; setup_fabdeploy()
 
 
 @task
@@ -37,7 +18,7 @@ def install():
     system.install_common_software.run()
 
     with settings(warn_only=True):
-        postgres.create_role.run()
+        postgres.create_user.run()
         postgres.create_db.run()
         postgres.grant.run()
 
@@ -48,7 +29,6 @@ def install():
 def setup():
     fabd.mkdirs.run()
 
-    gunicorn.push_config.run()
     nginx.push_gunicorn_config.run()
     nginx.restart.run()
 
@@ -62,20 +42,25 @@ def clean():
 @task
 def deploy():
     fabd.mkdirs.run()
+    version.create.run()
+
     postgres.dump.run()
 
     git.init.run()
     git.push.run()
+
     django.push_settings.run()
     supervisor.push_configs.run()
+    gunicorn.push_config.run()
 
-    if not files.exists('%(env_path)s/bin' % env.conf):
-        virtualenv.create.run()
+    virtualenv.create.run()
     virtualenv.pip_install_req.run()
     virtualenv.pip_install.run(app='gunicorn')
-
-    supervisor.d.run()
-    supervisor.update.run()
-    supervisor.restart_program.run()
+    virtualenv.make_relocatable.run()
 
     django.syncdb.run()
+
+    version.activate.run()
+
+    supervisor.d.run()
+    supervisor.reload.run()
