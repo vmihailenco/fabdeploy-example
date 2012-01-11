@@ -5,8 +5,7 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'fabdeploy_example.views.home', name='home'),
+    url(r'^$', 'fabdeploy_example.views.home', name='home'),
     # url(r'^fabdeploy_example/', include('fabdeploy_example.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

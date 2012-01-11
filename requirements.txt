@@ -1,5 +1,4 @@
 psycopg2
-ordereddict
 django
 jinja2
 fabric

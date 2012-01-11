@@ -24,12 +24,13 @@ class BaseConf(DefaultConf):
     supervisor__log_path = ['%(var_path)s', 'log', 'supervisor']
 
 
-class LocalhostConf(DefaultConf):
+class LocalhostConf(BaseConf):
     address = 'fabdeploy_example@localhost'
+    server_name = 'fabdeploy_example'
     sudo_user = 'vladimir'
 
     gunicorn_port = 8020
     remote_settings_lfile = 'staging_settings.py.tmplt'
 
-    supervisord_config_lfile = ['supervisor', 'supervisord.conf']
+    supervisord_config_lfile = 'supervisor/supervisord.conf'
     supervisord_config_file = ['%(supervisor_config_path)s', 'supervisord.conf']
