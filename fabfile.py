@@ -32,6 +32,8 @@ def setup():
     nginx.push_gunicorn_config.run()
     nginx.restart.run()
 
+    supervisor.d.run()
+
 
 @task
 def clean():
@@ -62,5 +64,8 @@ def deploy():
 
     version.activate.run()
 
-    supervisor.d.run()
+    supervisor.update.run()
+    supervisor.restart_program.run(program='celeryd')
+    gunicorn.reload_with_supervisor.run()
+
     supervisor.reload.run()
