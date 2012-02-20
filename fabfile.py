@@ -1,8 +1,3 @@
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
-
 from fabdeploy import monkey; monkey.patch_all()
 from fabric.api import env, task, settings
 from fabric.contrib import files
