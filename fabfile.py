@@ -67,5 +67,3 @@ def deploy():
     supervisor.update.run()
     supervisor.restart_program.run(program='celeryd')
     gunicorn.reload_with_supervisor.run()
-
-    supervisor.reload.run()
